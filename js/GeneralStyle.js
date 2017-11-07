@@ -41,6 +41,6 @@ export default Style = {
   FONT_SIZE: em(1),
   FONT_SIZE_SMALLER: em(0.75),
   FONT_SIZE_SMALL: em(0.875),
-  FONT_SIZE_TITLE: em(1.25),
+  FONT_SIZE_TITLE: em(2),
   
 };
