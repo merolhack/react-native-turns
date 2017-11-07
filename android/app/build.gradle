@@ -25,6 +25,7 @@ android {
     }
   }
   dexOptions {
+    maxProcessCount 8
     javaMaxHeapSize "8g"
   }
   lintOptions {
@@ -53,6 +54,7 @@ repositories{
 }
 
 dependencies {
+    compile project(':react-native-splash-screen')
   compile fileTree(dir: 'libs', include: ['*.jar'])
   testCompile 'junit:junit:4.12'
   compile 'com.android.support:appcompat-v7:25.3.1'

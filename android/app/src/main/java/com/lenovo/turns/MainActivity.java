@@ -3,6 +3,8 @@ package com.lenovo.turns;
 import android.os.Bundle;
 
 import com.facebook.react.ReactPackage;
+import com.facebook.react.ReactActivity;
+import org.devio.rn.splashscreen.SplashScreen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +39,12 @@ public class MainActivity extends ExponentActivity {
   public boolean isDebug() {
     return BuildConfig.DEBUG;
   }
+
+/*    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);  // here
+        super.onCreate(savedInstanceState);
+    }*/
 
   @Override
   public Bundle initialProps(Bundle expBundle) {
