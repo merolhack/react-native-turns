@@ -14,6 +14,10 @@ export default class App extends Component {
     disabled: false,
   }
 
+  constructor() {
+    
+  }
+
   /**
    * Shows the alert component
    * 
@@ -40,6 +44,27 @@ export default class App extends Component {
     this.setState({disabled: !this.state.disabled});
   }
 
+  /**
+   * 
+   */
+  _postCreateTurn = (groupName, stateName) => {const io = require('socket.io')();
+    return fetch('https://facebook.github.io/react-native/movies.json', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(JSON.stringify(responseJson));
+      return responseJson.movies;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
   render() {
     return (
       <Grid>
@@ -64,14 +89,14 @@ export default class App extends Component {
           <Col>
             <Row style={styles.row}>
               <Button onPress={() => {
-                  this._setAlertVisible('G1', 'counterG1')
+                  this._postCreateTurn('G1', 'counterG1')
                 }}
                 title="Moto A" />
             </Row>
           </Col>
           <Col>
             <Row style={styles.row}>
-              <Button onPress={() => {
+              <Button style={styles.btn} onPress={() => {
                   this._setAlertVisible('G2','counterG2')
                 }}
                 title="Moto B" />
