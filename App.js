@@ -1,21 +1,34 @@
 import React, { Component } from 'react';
 import { Alert, StyleSheet, Text, View, Button, CheckBox } from 'react-native';
 // External dependencies
+import SocketIOClient from 'socket.io-client';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import SplashScreen from 'react-native-splash-screen';
 
 // We Import our Stylesheet
 import GeneralStyle from "./js/GeneralStyle";
 
-export default class App extends Component {
+class App extends Component {
   state = {
     counterG1: 0,
     counterG2: 0,
     disabled: false,
   }
 
-  constructor() {
-    
+  constructor(props) {
+    super(props);
+    // Creating the socket-client instance will automatically connect to the server.
+    const options = {
+      path: '/turns',
+    };
+    this.socket = SocketIOClient('http://192.168.1.64:8000', options);
+    // Subscribe to the events
+    this.socket.on('turn-created', (payload) => {
+      console.log('The turn has created!', JSON.stringify(payload));
+      this._setAlertVisible({payload});
+    });
+    // TODO
+    console.ignoredYellowBox = ['Setting a timer'];
   }
 
   /**
@@ -24,12 +37,10 @@ export default class App extends Component {
    * @param {string} groupName 
    * @param {string} stateName 
    */
-  _setAlertVisible = (groupName, stateName) => {
-    const increment = this.state[stateName] + 1;
-    this.setState({ [stateName]: increment });
+  _setAlertVisible = (groupName, stateName, counter) => {
     Alert.alert(
       'Turno',
-      `Se ha impreso su turno #${groupName} - ${increment}`,
+      `Se ha impreso su turno #${groupName} - ${counter}`,
       [
         {text: 'Aceptar', onPress: () => console.log('OK Pressed')},
       ],
@@ -45,24 +56,10 @@ export default class App extends Component {
   }
 
   /**
-   * 
+   * Emit to the WebSocket server
    */
-  _postCreateTurn = (groupName, stateName) => {const io = require('socket.io')();
-    return fetch('https://facebook.github.io/react-native/movies.json', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      console.log(JSON.stringify(responseJson));
-      return responseJson.movies;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  _postCreateTurn = (groupName, stateName) => {
+    this.socket.emit('create-turn', {groupName, stateName});
   }
 
   render() {
@@ -97,7 +94,7 @@ export default class App extends Component {
           <Col>
             <Row style={styles.row}>
               <Button style={styles.btn} onPress={() => {
-                  this._setAlertVisible('G2','counterG2')
+                  this._postCreateTurn('G2','counterG2')
                 }}
                 title="Moto B" />
             </Row>
@@ -107,7 +104,7 @@ export default class App extends Component {
           <Col>
             <Row style={styles.row}>
               <Button onPress={() => {
-                  this._setAlertVisible('G1', 'counterG1')
+                  this._postCreateTurn('G1', 'counterG1')
                 }}
                 title="Moto C" />
             </Row>
@@ -115,7 +112,7 @@ export default class App extends Component {
           <Col>
             <Row style={styles.row}>
               <Button onPress={() => {
-                  this._setAlertVisible('G2','counterG2')
+                  this._postCreateTurn('G2','counterG2')
                 }}
                 title="Moto D" />
             </Row>
@@ -125,7 +122,7 @@ export default class App extends Component {
           <Col>
             <Row style={styles.row}>
               <Button onPress={() => {
-                  this._setAlertVisible('G1', 'counterG1')
+                  this._postCreateTurn('G1', 'counterG1')
                 }}
                 title="Moto E" />
             </Row>
@@ -133,7 +130,7 @@ export default class App extends Component {
           <Col>
             <Row style={styles.row}>
               <Button onPress={() => {
-                  this._setAlertVisible('G2','counterG2')
+                  this._postCreateTurn('G2','counterG2')
                 }}
                 title="Moto F" />
             </Row>
@@ -166,3 +163,5 @@ const styles = StyleSheet.create({
     width: '100%',
   }
 });
+
+export default App;

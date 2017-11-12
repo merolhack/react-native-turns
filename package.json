@@ -5,7 +5,8 @@
   "devDependencies": {
     "jest-expo": "^22.0.0",
     "react-native-easy-grid": "^0.1.15",
-    "react-test-renderer": "16.0.0-beta.5"
+    "react-test-renderer": "16.0.0-beta.5",
+    "socket.io-client": "^2.0.4"
   },
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
